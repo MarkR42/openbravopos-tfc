@@ -71,7 +71,7 @@ public class UnicodeTranslatorInt extends UnicodeTranslator {
                 case '\u00e9': return -0x7E; // e acute
                 case '\u00ed': return -0x5F; // i acute
                 case '\u00f3': return -0x5E; // o acute
-                case '\u00fa': return -0x5D; // u acute
+                case '\u00fa': return (byte) 0xA3; // Pound Symbol
                 case '\u00f1': return -0x5C; // n tilde
                 case '\u00d1': return -0x5B; // N tilde
                 case '\u00aa': return -0x5A;

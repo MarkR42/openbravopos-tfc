@@ -99,6 +99,8 @@ public class DeviceTicket {
                 m_devicedisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorInt());
             } else if ("surepos".equals(sDisplayType)) {
                 m_devicedisplay = new DeviceDisplaySurePOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2));
+            } else if ("BA60".equals(sDisplayType)) {
+                m_devicedisplay = new DeviceDisplayBA60(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorInt());
             } else if ("ld200".equals(sDisplayType)) {
                 m_devicedisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorEur());
             } else if ("javapos".equals(sDisplayType)) {

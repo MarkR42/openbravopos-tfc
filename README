@@ -1,3 +1,22 @@
+== Openbravo POS 2.30.2 modified for the True Food Coop ==
+
+The True Food community cooperative is a local food cooperative in Reading,
+England.
+
+We have made these modifications to the OpenBravo system, mostly to support
+smaller screen sizes and to work with lower precision touch-screens.
+
+For more information - see http://www.truefood.coop/
+
+===
+
+To build from source, install "ant" and then do
+
+ant dist.bin
+
+
+(original README follows)
+
 == Openbravo POS 2.30.2  ==
 
 Openbravo POS is a point of sale application designed for touch screens, supports ESC/POS ticket printers, customer displays and barcode scanners. It is multiuser providing product entry forms, reports and charts.

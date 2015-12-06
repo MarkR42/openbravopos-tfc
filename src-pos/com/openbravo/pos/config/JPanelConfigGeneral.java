@@ -215,6 +215,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachineDisplay.addItem("epson");
         jcboMachineDisplay.addItem("ld200");
         jcboMachineDisplay.addItem("surepos");
+        jcboMachineDisplay.addItem("BA60");
         jcboMachineDisplay.addItem("Not defined");
 
         jcboConnDisplay.addItem("serial");
@@ -430,7 +431,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
 
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
-        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
+        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay) || "BA60".equals(sMachineDisplay)) {
             config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
         } else if ("javapos".equals(sMachineDisplay)) {
             config.setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
@@ -1194,7 +1195,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineDisplayActionPerformed
         CardLayout cl = (CardLayout) (m_jDisplayParams.getLayout());
 
-        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem())) {
+        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem()) || "BA60".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "comm");
         } else if ("javapos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "javapos");

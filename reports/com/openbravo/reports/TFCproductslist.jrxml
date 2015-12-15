@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TFCproductslist" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="157"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="TAXESLOGIC" class="com.openbravo.pos.sales.TaxesLogic" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.PRICESELL, PRODUCTS.CATEGORY, CATEGORIES.NAME AS CATEGORYNAME, TAXES.NAME AS TAXNAME, TAXES.RATE AS TAXRATE
+FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID LEFT OUTER JOIN TAXES ON PRODUCTS.TAX = TAXES.ID
+ORDER BY PRODUCTS.CATEGORY]]>
+	</queryString>
+	<field name="REFERENCE" class="java.lang.String"/>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="PRICESELL" class="java.lang.Double"/>
+	<field name="CATEGORY" class="java.lang.String"/>
+	<field name="CATEGORYNAME" class="java.lang.String"/>
+	<field name="TAXCAT" class="java.lang.String"/>
+	<field name="TAXCATNAME" class="java.lang.String"/>
+	<field name="PRICEBUY" class="java.lang.Double"/>
+	<field name="SCALE" class="java.lang.String"/>
+	<field name="MARKUP" class="java.lang.Double"/>
+	<field name="CODE" class="java.lang.String"/>
+	<field name="PROPERTIES" class="java.lang.String"/>
+	<field name="INCATELOG" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="99">
+			<staticText>
+				<reportElement x="43" y="0" width="43" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product code
+(needed)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="86" y="0" width="51" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Category
+(optional)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="0" width="110" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product name
+(optional)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="0" width="43" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Case buy price
+(needed)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="461" y="0" width="67" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nominal markup, format is x.xx
+(used to set "nominalMarkup", leave blank to use existing "nominalMarkup")]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="416" y="0" width="45" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tax code
+(needed)
+Blank = exempt
+V = standard VAT
+L = Low VAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="528" y="0" width="54" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sell price +
+tax (leave blank to calculate, put value in to match price)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="628" y="0" width="48" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sold by Kg
+blank=no
+1=yes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="0" width="62" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Barcode
+(optional)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="782" y="0" width="60" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Notes
+(Don't change this)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="43" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supplier
+(needed)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="247" y="0" width="43" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Case size
+(needed, must include "1x" for case sizes of 1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="333" y="0" width="83" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operator:
+(optional)
+s = rise
+t = fall
+H = size change
+r = special offer
+l = discontinued
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="676" y="0" width="44" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Show in categlog
+blank=no
+1=yes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="582" y="0" width="46" height="99"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Was this a  price match ("yes" or blank)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="137" y="0" width="110" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="43" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[(java.lang.String) (($F{REFERENCE}.contains(";;") ? $F{REFERENCE}.split(";;",2)[1] : ""))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="0" width="43" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{PRICEBUY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="0" width="45" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TAXCATNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="628" y="0" width="48" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SCALE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="720" y="0" width="62" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="782" y="0" width="60" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PROPERTIES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="528" y="0" width="54" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAXCAT}, new Date())))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="43" y="0" width="43" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[(java.lang.String) ($F{REFERENCE}.split(";;",2)[0])]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="461" y="0" width="67" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[(java.lang.String)($F{PROPERTIES}.contains("nominalMarkup") ? new String($F{PROPERTIES}.substring( $F{PROPERTIES}.indexOf( "nominalMarkup" )+14,$F{PROPERTIES}.indexOf( ";", $F{PROPERTIES}.indexOf( "nominalMarkup" ) ))) : new String(""))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="333" y="0" width="83" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="676" y="0" width="44" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INCATELOG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="86" y="0" width="51" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CATEGORYNAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="247" y="0" width="43" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="582" y="0" width="46" height="20">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[(java.lang.String)($F{PROPERTIES}.contains("priceMatch") ? "Yes" : "" )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

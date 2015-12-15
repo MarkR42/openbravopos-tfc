@@ -61,7 +61,25 @@ public class JMessageDialog extends javax.swing.JDialog {
         myMsg.initComponents();
         myMsg.applyComponentOrientation(parent.getComponentOrientation());
         myMsg.jscrException.setVisible(false);        
-        myMsg.getRootPane().setDefaultButton(myMsg.jcmdOK);
+        /* TFC: usability. Ensure that pressing enter will NOT
+         * dismiss the dialog box. Scanning another barcode will cause
+         * "enter" to be pressed, which might dismiss a message and
+         * the user won't notice.
+         * 
+         * Also, beep to alert the user.
+         * 
+         * This message is often caused when a barcode is scanned 
+         * incorrectly, or we scan the barcode of an item which isn't
+         * in the DB (or incorrect in DB)
+         * 
+         * (Barcode check digit, it's only 1 digit so it passes 10%
+         * of the time)
+         */
+        myMsg.getRootPane().setDefaultButton(null);
+        myMsg.setAlwaysOnTop(true);
+        myMsg.jcmdOK.setFocusable(false);
+        myMsg.jcmdMore.setFocusable(false);
+        Toolkit.getDefaultToolkit().beep();
         
         myMsg.jlblIcon.setIcon(inf.getSignalWordIcon());
         myMsg.jlblErrorCode.setText(inf.getErrorCodeMsg());

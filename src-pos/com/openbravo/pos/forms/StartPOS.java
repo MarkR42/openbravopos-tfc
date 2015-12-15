@@ -28,6 +28,10 @@ import java.util.logging.Logger;
 import javax.swing.LookAndFeel;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.api.SubstanceSkin;
+import java.awt.Font;
+import java.util.Enumeration;
+import javax.swing.UIDefaults;
+import javax.swing.plaf.FontUIResource;
 
 /**
  *
@@ -55,6 +59,22 @@ public class StartPOS {
         }  
     }
     
+    /*
+     * Set the font size for everything
+     */
+    private static void setApplicationFont(float size)
+    {
+        Enumeration enumer = UIManager.getDefaults().keys();
+        while (enumer.hasMoreElements()) {
+            Object key = enumer.nextElement();
+            Object value = UIManager.get(key);
+            if ((value instanceof Font))
+            {
+                UIManager.put(key, new FontUIResource(((Font)value).deriveFont(size)));
+            }
+        }
+    }
+
     public static void main (final String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -97,6 +117,8 @@ public class StartPOS {
                 } catch (Exception e) {
                     logger.log(Level.WARNING, "Cannot set look and feel", e);
                 }
+                
+                StartPOS.setApplicationFont(16.0F);
                 
                 String screenmode = config.getProperty("machine.screenmode");
                 if ("fullscreen".equals(screenmode)) {

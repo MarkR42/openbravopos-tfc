@@ -43,6 +43,8 @@ public class DeviceScale {
             m_scale = new ScaleFake();            
         } else if ("screen".equals(sScaleType)) { // on screen scale
             m_scale = new ScaleDialog(parent);
+        } else if ("ohausaviator".equals(sScaleType)) {
+            m_scale = new ScaleOhausAviator7000(parent, sScaleParam1);
         } else {
             m_scale = null;
         }

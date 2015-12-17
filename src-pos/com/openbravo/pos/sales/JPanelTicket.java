@@ -1258,6 +1258,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jbtnScale.setFocusPainted(false);
         m_jbtnScale.setFocusable(false);
         m_jbtnScale.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jbtnScale.setMaximumSize(new java.awt.Dimension(116, 54));
+        m_jbtnScale.setMinimumSize(new java.awt.Dimension(116, 54));
+        m_jbtnScale.setPreferredSize(new java.awt.Dimension(116, 54));
         m_jbtnScale.setRequestFocusEnabled(false);
         m_jbtnScale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1349,6 +1352,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jEditAttributes.setFocusPainted(false);
         jEditAttributes.setFocusable(false);
         jEditAttributes.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jEditAttributes.setMaximumSize(new java.awt.Dimension(84, 66));
+        jEditAttributes.setMinimumSize(new java.awt.Dimension(84, 66));
+        jEditAttributes.setPreferredSize(new java.awt.Dimension(84, 66));
         jEditAttributes.setRequestFocusEnabled(false);
         jEditAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1449,6 +1455,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jPanEntries.setLayout(new javax.swing.BoxLayout(m_jPanEntries, javax.swing.BoxLayout.Y_AXIS));
 
+        m_jNumberKeys.setMinimumSize(new java.awt.Dimension(344, 360));
+        m_jNumberKeys.setPreferredSize(new java.awt.Dimension(344, 360));
         m_jNumberKeys.addJNumberEventListener(new com.openbravo.beans.JNumberEventListener() {
             public void keyPerformed(com.openbravo.beans.JNumberEvent evt) {
                 m_jNumberKeysKeyPerformed(evt);
@@ -1457,6 +1465,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanEntries.add(m_jNumberKeys);
 
         jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        jPanel9.setMinimumSize(new java.awt.Dimension(321, 89));
+        jPanel9.setPreferredSize(new java.awt.Dimension(321, 89));
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
         m_jPrice.setBackground(java.awt.Color.white);

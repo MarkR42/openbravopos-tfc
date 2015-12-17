@@ -152,6 +152,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter.addItem("COM2");
         jcboSerialPrinter.addItem("COM3");
         jcboSerialPrinter.addItem("COM4");
+        jcboSerialPrinter.addItem("COM5");//R.Shute 06/08/12
+        jcboSerialPrinter.addItem("COM6");//R.Shute 06/08/12
+        jcboSerialPrinter.addItem("COM7");//R.Shute 06/08/12
+        jcboSerialPrinter.addItem("COM8");//R.Shute 06/08/12
+        jcboSerialPrinter.addItem("COM9");//R.Shute 06/08/12
+        jcboSerialPrinter.addItem("COM10");//R.Shute 06/08/12
         jcboSerialPrinter.addItem("LPT1");
         jcboSerialPrinter.addItem("/dev/ttyS0");
         jcboSerialPrinter.addItem("/dev/ttyS1");
@@ -177,12 +183,18 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter2.addItem("COM2");
         jcboSerialPrinter2.addItem("COM3");
         jcboSerialPrinter2.addItem("COM4");
+        jcboSerialPrinter2.addItem("COM5");//R. Shute 06/08/12
+        jcboSerialPrinter2.addItem("COM6");//R. Shute 06/08/12
+        jcboSerialPrinter2.addItem("COM7");//R. Shute 06/08/12
+        jcboSerialPrinter2.addItem("COM8");//R. Shute 06/08/12
+        jcboSerialPrinter2.addItem("COM9");//R. Shute 06/08/12
+        jcboSerialPrinter2.addItem("COM10");//R. Shute 06/08/12
         jcboSerialPrinter2.addItem("LPT1");
         jcboSerialPrinter2.addItem("/dev/ttyS0");
         jcboSerialPrinter2.addItem("/dev/ttyS1");
         jcboSerialPrinter2.addItem("/dev/ttyS2");
         jcboSerialPrinter2.addItem("/dev/ttyS3");
-
+ 
         // Printer 3
         jcboMachinePrinter3.addItem("screen");
         jcboMachinePrinter3.addItem("printer");
@@ -202,6 +214,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter3.addItem("COM2");
         jcboSerialPrinter3.addItem("COM3");
         jcboSerialPrinter3.addItem("COM4");
+        jcboSerialPrinter3.addItem("COM5");//R. Shute 06/08/12
+        jcboSerialPrinter3.addItem("COM6");//R. Shute 06/08/12
+        jcboSerialPrinter3.addItem("COM7");//R. Shute 06/08/12
+        jcboSerialPrinter3.addItem("COM8");//R. Shute 06/08/12
+        jcboSerialPrinter3.addItem("COM9");//R. Shute 06/08/12
+        jcboSerialPrinter3.addItem("COM10");//R. Shute 06/08/12
         jcboSerialPrinter3.addItem("LPT1");
         jcboSerialPrinter3.addItem("/dev/ttyS0");
         jcboSerialPrinter3.addItem("/dev/ttyS1");
@@ -225,6 +243,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialDisplay.addItem("COM2");
         jcboSerialDisplay.addItem("COM3");
         jcboSerialDisplay.addItem("COM4");
+        jcboSerialDisplay.addItem("COM5");//R.Shute 06/08/12
+        jcboSerialDisplay.addItem("COM6");//R.Shute 06/08/12
+        jcboSerialDisplay.addItem("COM7");//R.Shute 06/08/12
+        jcboSerialDisplay.addItem("COM8");//R.Shute 06/08/12
+        jcboSerialDisplay.addItem("COM9");//R.Shute 06/08/12
+        jcboSerialDisplay.addItem("COM10");//R.Shute 06/08/12
         jcboSerialDisplay.addItem("LPT1");
         jcboSerialDisplay.addItem("/dev/ttyS0");
         jcboSerialDisplay.addItem("/dev/ttyS1");
@@ -255,6 +279,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialScanner.addItem("COM2");
         jcboSerialScanner.addItem("COM3");
         jcboSerialScanner.addItem("COM4");
+        jcboSerialScanner.addItem("COM5");//R.Shute 06/08/12
+        jcboSerialScanner.addItem("COM6");//R.Shute 06/08/12
+        jcboSerialScanner.addItem("COM7");//R.Shute 06/08/12
+        jcboSerialScanner.addItem("COM8");//R.Shute 06/08/12
+        jcboSerialScanner.addItem("COM9");//R.Shute 06/08/12
+        jcboSerialScanner.addItem("COM10");//R.Shute 06/08/12
         jcboSerialScanner.addItem("/dev/ttyS0");
         jcboSerialScanner.addItem("/dev/ttyS1");
         jcboSerialScanner.addItem("/dev/ttyS2");

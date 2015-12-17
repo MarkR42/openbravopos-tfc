@@ -1,235 +1,236 @@
 /*
- * Truefood coop.
- * 
- * Decompiled because it seems, the source was lost.
- *
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 
-/*     */ package com.openbravo.pos.scale;
-/*     */ 
-/*     */ import com.openbravo.beans.JNumberDialog;
-/*     */ import com.openbravo.data.gui.JMessageDialog;
-/*     */ import com.openbravo.data.gui.MessageInf;
-/*     */ import com.openbravo.pos.forms.AppLocal;
-/*     */ import gnu.io.CommPortIdentifier;
-/*     */ import gnu.io.NoSuchPortException;
-/*     */ import gnu.io.PortInUseException;
-/*     */ import gnu.io.SerialPort;
-/*     */ import gnu.io.SerialPortEvent;
-/*     */ import gnu.io.SerialPortEventListener;
-/*     */ import gnu.io.UnsupportedCommOperationException;
-/*     */ import java.awt.Component;
-/*     */ import java.io.IOException;
-/*     */ import java.io.InputStream;
-/*     */ import java.io.OutputStream;
-/*     */ import java.util.TooManyListenersException;
-/*     */ import javax.swing.ImageIcon;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ public class ScaleOhausAviator7000
-/*     */   implements Scale, SerialPortEventListener
-/*     */ {
-/*     */   private Component parent;
-/*     */   private CommPortIdentifier m_PortIdPrinter;
-/*     */   private SerialPort m_CommPortPrinter;
-/*     */   private String m_sPortScale;
-/*     */   private OutputStream m_out;
-/*     */   private InputStream m_in;
-/*     */   private boolean m_S_detected;
-/*     */   private int m_S_error_detected;
-/*     */   private static final int SCALE_READY = 0;
-/*     */   private static final int SCALE_READING = 1;
-/*     */   private static final int SCALE_READINGDECIMALS = 2;
-/*     */   private double m_dWeightBuffer;
-/*     */   private double m_dWeightDecimals;
-/*     */   private int m_iStatusScale;
-/*     */   
-/*     */   public ScaleOhausAviator7000(Component parent, String sPortPrinter)
-/*     */   {
-/*  56 */     this.parent = parent;
-/*  57 */     m_sPortScale = sPortPrinter;
-/*  58 */     m_out = null;
-/*  59 */     m_in = null;
-/*     */     
-/*  61 */     m_iStatusScale = SCALE_READY;
-/*  62 */     m_dWeightBuffer = 0.0D;
-/*  63 */     m_dWeightDecimals = 1.0D;
-/*     */     
-/*  65 */     m_S_detected = false;
-/*  66 */     m_S_error_detected = 0;
-/*     */   }
-/*     */   
-/*     */ 
-/*     */   public Double readWeight()
-/*     */   {
-/*  72 */     synchronized (this)
-/*     */     {
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*  85 */       this.m_iStatusScale = 0;
-/*     */       
-/*     */ 
-/*  88 */       this.m_dWeightBuffer = 0.0D;
-/*  89 */       this.m_dWeightDecimals = 1.0D;
-/*  90 */       this.m_S_detected = false;
-/*  91 */       this.m_S_error_detected = 0;
-/*     */       
-/*  93 */       write(new byte[] { 87 });
-/*     */       
-/*  95 */       write(new byte[] { 13 });
-/*  96 */       flush();
-/*     */       
-/*     */ 
-/*     */       try
-/*     */       {
-/* 101 */         wait(50L);
-/*     */       }
-/*     */       catch (InterruptedException e) {}
-/*     */       
-/*     */ 
-/*     */ 
-/*     */       try
-/*     */       {
-/* 109 */         while (this.m_in.available() > 0) {
-/* 110 */           int b = this.m_in.read();
-/*     */           
-/*     */ 
-/* 113 */           if (b == 10)
-/*     */           {
-/* 115 */             synchronized (this) {
-/* 116 */               this.m_iStatusScale = 0;
-/* 117 */               notifyAll();
-/*     */             }
-/* 119 */           } else if (((((b > 47) && (b < 58)) || (b == 46) ? 1 : 0) & (!this.m_S_detected ? 1 : 0)) != 0) {
-/* 120 */             synchronized (this) {
-/* 121 */               if (this.m_iStatusScale == 0) {
-/* 122 */                 this.m_dWeightBuffer = 0.0D;
-/* 123 */                 this.m_dWeightDecimals = 1.0D;
-/* 124 */                 this.m_iStatusScale = 1;
-/*     */               }
-/* 126 */               if (b == 46) {
-/* 127 */                 this.m_iStatusScale = 2;
-/*     */               } else {
-/* 129 */                 this.m_dWeightBuffer = (this.m_dWeightBuffer * 10.0D + b - 48.0D);
-/* 130 */                 if (this.m_iStatusScale == 2) {
-/* 131 */                   this.m_dWeightDecimals *= 10.0D;
-/*     */                 }
-/*     */               }
-/*     */             }
-/*     */           } else {
-/* 136 */             if (b == 83) {
-/* 137 */               this.m_S_detected = true;
-/*     */             }
-/*     */             
-/* 140 */             if ((this.m_S_detected) && 
-/* 141 */               (b == 50)) {
-/* 142 */               this.m_S_error_detected += 1;
-/*     */             }
-/*     */           }
-/*     */         }
-/*     */       }
-/*     */       catch (IOException eIO) {}
-/*     */     }
-/*     */     
-/*     */ 
-/*     */ 
-/*     */ 
-/* 153 */     if (this.m_S_error_detected > 0) {
-/* 154 */       this.m_iStatusScale = 0;
-/* 155 */       this.m_dWeightBuffer = 0.0D;
-/* 156 */       this.m_dWeightDecimals = 1.0D;
-/*     */       
-/*     */ 
-/* 159 */       return JNumberDialog.showEditNumber(this.parent, AppLocal.getIntString("label.scale"), AppLocal.getIntString("label.scaleinput"), new ImageIcon(ScaleDialog.class.getResource("/com/openbravo/images/ark2.png")));
-/*     */     }
-/*     */     
-/* 162 */     if (this.m_iStatusScale == 0)
-/*     */     {
-/* 164 */       double dWeight = this.m_dWeightBuffer / this.m_dWeightDecimals;
-/* 165 */       this.m_dWeightBuffer = 0.0D;
-/* 166 */       this.m_dWeightDecimals = 1.0D;
-/* 167 */       return new Double(dWeight);
-/*     */     }
-/* 169 */     this.m_iStatusScale = 0;
-/* 170 */     this.m_dWeightBuffer = 0.0D;
-/* 171 */     this.m_dWeightDecimals = 1.0D;
-/*     */     
-/*     */ 
-/*     */ 
-/* 175 */     return JNumberDialog.showEditNumber(this.parent, AppLocal.getIntString("label.scale"), AppLocal.getIntString("label.scaleinput"), new ImageIcon(ScaleDialog.class.getResource("/com/openbravo/images/ark2.png")));
-/*     */   }
-/*     */   
-/*     */ 
-/*     */   private void flush()
-/*     */   {
-/*     */     try
-/*     */     {
-/* 183 */       this.m_out.flush();
-/*     */     }
-/*     */     catch (IOException e) {}
-/*     */   }
-/*     */   
-/*     */   private void write(byte[] data) {
-/*     */     try {
-/* 190 */       if (this.m_out == null) {
-/* 191 */         this.m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(this.m_sPortScale);
-/*     */         
-/* 193 */         this.m_CommPortPrinter = ((SerialPort)this.m_PortIdPrinter.open("PORTID", 2000));
-/*     */         
-/* 195 */         this.m_out = this.m_CommPortPrinter.getOutputStream();
-/* 196 */         this.m_in = this.m_CommPortPrinter.getInputStream();
-/* 197 */         this.m_CommPortPrinter.addEventListener(this);
-/* 198 */         this.m_CommPortPrinter.notifyOnDataAvailable(true);
-/* 199 */         this.m_CommPortPrinter.setSerialPortParams(9600, 8, 1, 0);
-/*     */       }
-/*     */       
-/* 202 */       this.m_out.write(data);
-/*     */     } catch (NoSuchPortException e) {
-/* 204 */       e.printStackTrace();
-/*     */     } catch (PortInUseException e) {
-/* 206 */       JMessageDialog.showMessage(this.parent, new MessageInf(-33554432, "COM port already in use, close any other applications that are using: ".concat(this.m_sPortScale), null));
-/* 207 */       e.printStackTrace();
-/*     */     } catch (UnsupportedCommOperationException e) {
-/* 209 */       e.printStackTrace();
-/*     */     } catch (TooManyListenersException e) {
-/* 211 */       e.printStackTrace();
-/*     */     } catch (IOException e) {
-/* 213 */       e.printStackTrace();
-/*     */     }
-/*     */   }
-/*     */   
-/*     */ 
-/*     */   public void serialEvent(SerialPortEvent e)
-/*     */   {
-/* 220 */     switch (e.getEventType()) {
-/*     */     case SerialPortEvent.DATA_AVAILABLE: 
-/* 232 */       JMessageDialog.showMessage(this.parent, new MessageInf(-33554432, "Data available interrupt received", null));
-                    break;
-                default:
-                    break;
-/*     */     }
-/*     */   }
-/*     */ }
+package com.openbravo.pos.scale;
+
+/**
+ * Setting the scales to NCI Protocol, I have proven communications (bi-directionally) using HyperTerminal to send applicable NCI commands through COM1, and receiving weight & scales-status data back from the scales:
+
+RS232 Comms:        9600 bps       8 data, no parity, 1 stop bit
+
+Scales protocol:      (NCI)            W<CR>     = send weight & status
+
+Rcv data format:     (NCI)            00.000KG<LF>Snn
+
+nn=00 no error;  nn=20 zero/tare weight error;  nn=02 overweight error (12kg max)
+ *
+ * @author R. Shute 06/08/12
+ */
+ 
+import gnu.io.*;
+import java.io.*;
+import java.util.TooManyListenersException;
+import com.openbravo.data.gui.JMessageDialog;
+import com.openbravo.data.gui.MessageInf;
+import java.awt.Component;
+import com.openbravo.beans.JNumberDialog;
+import com.openbravo.pos.forms.AppLocal;
+import javax.swing.ImageIcon;
+
+public class ScaleOhausAviator7000 implements Scale, SerialPortEventListener {
+
+    private Component parent;
+
+    private CommPortIdentifier m_PortIdPrinter;
+    private SerialPort m_CommPortPrinter;
+
+    private String m_sPortScale;
+    private OutputStream m_out;
+    private InputStream m_in;
+
+    private boolean m_S_detected;
+    private int m_S_error_detected;
+
+    private static final int SCALE_READY = 0;
+    private static final int SCALE_READING = 1;
+    private static final int SCALE_READINGDECIMALS = 2;
+
+    private double m_dWeightBuffer;
+    private double m_dWeightDecimals;
+    private int m_iStatusScale;
+
+    /** Creates a new instance of ScaleComm */
+    public ScaleOhausAviator7000(Component parent, String sPortPrinter) {
+        this.parent = parent;
+        m_sPortScale = sPortPrinter;
+        m_out = null;
+        m_in = null;
+
+        m_iStatusScale = SCALE_READY;
+        m_dWeightBuffer = 0.0;
+        m_dWeightDecimals = 1.0;
+
+        m_S_detected = false;
+        m_S_error_detected = 0;
+
+    }
+
+    public Double readWeight() {
+
+        synchronized(this) {
+        //JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "readWeight",null ));
+
+            /*if (m_iStatusScale != SCALE_READY) {
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                }
+                if (m_iStatusScale != SCALE_READY) {
+                    // bascula tonta.
+                    m_iStatusScale = SCALE_READY;
+                }
+            }*/
+            m_iStatusScale = SCALE_READY;
+
+            // initialise
+            m_dWeightBuffer = 0.0;
+            m_dWeightDecimals = 1.0;
+            m_S_detected = false;
+            m_S_error_detected = 0;
+
+            write(new byte[] {0x57}); // W, this get to 3 decimal places
+            //write(new byte[] {0x48}); // H, this get to 4 decimal places
+            write(new byte[] {0x0D}); // CR
+            flush();
+            //JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "sentReadCommand",null ));
+
+            try {
+
+                wait(50);
+            } catch (InterruptedException e) {
+            }
+
+
+            try {
+                  //JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "in try ",null ));
+                    
+                    while (m_in.available() > 0/*&(b != 0x004B*/) {//End while loop when K detected
+                        int b = m_in.read();
+                        //JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "readWeight ".concat(Integer.toHexString(b)),null ));
+
+                        if (b == 0x000A) { // LF ASCII
+                            // Fin de lectura
+                            synchronized (this) {
+                                m_iStatusScale = SCALE_READY;
+                                notifyAll();
+                            }
+                        } else if (((b > 0x002F && b < 0x003A) || b == 0x002E)&(!m_S_detected)){ //0-9 or .
+                            synchronized(this) {
+                                if (m_iStatusScale == SCALE_READY) {
+                                    m_dWeightBuffer = 0.0; // se supone que esto debe estar ya garantizado
+                                    m_dWeightDecimals = 1.0;
+                                    m_iStatusScale = SCALE_READING;
+                                }
+                                if (b == 0x002E) { // .
+                                    m_iStatusScale = SCALE_READINGDECIMALS;
+                                } else {
+                                    m_dWeightBuffer = m_dWeightBuffer * 10.0 + b - 0x0030;
+                                    if (m_iStatusScale == SCALE_READINGDECIMALS) {
+                                        m_dWeightDecimals *= 10.0;
+                                    }
+                                }
+                            }
+                        } else {//This will be called when any other characters appear
+                            if (b == 0x0053){// S
+                                m_S_detected = true;
+                            }
+
+                            if (m_S_detected){
+                              if (b == 0x0032){ //See coments at top for error cosed
+                                  m_S_error_detected++;
+                              }
+
+                            }
+                        }
+                        //JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "weight buffer ".concat(Double.toString(m_dWeightBuffer)),null ));
+                    }
+
+                } catch (IOException eIO) {}
+        }
+
+            if (m_S_error_detected > 0){//Check if errors were detected.
+                 m_iStatusScale = SCALE_READY;
+                 m_dWeightBuffer = 0.0;
+                 m_dWeightDecimals = 1.0;
+
+                 // If weight is Erroneous then pop up a number box for the weight to be entered manually.
+                 return JNumberDialog.showEditNumber(parent, AppLocal.getIntString("label.scale"), AppLocal.getIntString("label.scaleinput"), new ImageIcon(ScaleDialog.class.getResource("/com/openbravo/images/ark2.png")));
+                 //return new Double(0.0);
+            }else {
+            if (m_iStatusScale == SCALE_READY) {
+                 // hemos recibido cositas o si no hemos recibido nada estamos a 0.0
+                 double dWeight = m_dWeightBuffer / m_dWeightDecimals;
+                 m_dWeightBuffer = 0.0;
+                 m_dWeightDecimals = 1.0;
+                 return new Double(dWeight);
+                } else {
+                 m_iStatusScale = SCALE_READY;
+                 m_dWeightBuffer = 0.0;
+                 m_dWeightDecimals = 1.0;
+
+                 // If weight is 0 then pop up a number box for the weight to be entered manually.
+                 // Set title for grams Kilos, ounzes, pounds, ...
+                return JNumberDialog.showEditNumber(parent, AppLocal.getIntString("label.scale"), AppLocal.getIntString("label.scaleinput"), new ImageIcon(ScaleDialog.class.getResource("/com/openbravo/images/ark2.png")));
+                //return new Double(0.0);
+                }
+            }
+    }
+
+    private void flush() {
+        try {
+            m_out.flush();
+        } catch (IOException e) {
+        }
+    }
+
+    private void write(byte[] data) {
+        try {
+            if (m_out == null) {
+                m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(m_sPortScale); // Tomamos el puerto
+
+                m_CommPortPrinter = (SerialPort) m_PortIdPrinter.open("PORTID", 2000); // Abrimos el puerto
+
+                m_out = m_CommPortPrinter.getOutputStream(); // Tomamos el chorro de escritura
+                m_in = m_CommPortPrinter.getInputStream();
+                m_CommPortPrinter.addEventListener(this);
+                m_CommPortPrinter.notifyOnDataAvailable(true);
+                m_CommPortPrinter.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE); // Configuramos el puerto
+            }
+               //JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "about to write Data",null ));
+            m_out.write(data);
+        } catch (NoSuchPortException e) {
+            e.printStackTrace();
+        } catch (PortInUseException e) {
+            JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "COM port already in use, close any other applications that are using: ".concat(m_sPortScale),null ));
+            e.printStackTrace();
+        } catch (UnsupportedCommOperationException e) {
+            e.printStackTrace();
+        } catch (TooManyListenersException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void serialEvent(SerialPortEvent e) {
+
+	// Determine type of event.
+	switch (e.getEventType()) {
+            case SerialPortEvent.BI:
+            case SerialPortEvent.OE:
+            case SerialPortEvent.FE:
+            case SerialPortEvent.PE:
+            case SerialPortEvent.CD:
+            case SerialPortEvent.CTS:
+            case SerialPortEvent.DSR:
+            case SerialPortEvent.RI:
+            case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
+                break;
+            case SerialPortEvent.DATA_AVAILABLE:
+               JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "Data available interrupt received",null ));
+
+        }
+    }
+}

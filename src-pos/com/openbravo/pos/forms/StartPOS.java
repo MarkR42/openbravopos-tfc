@@ -33,6 +33,11 @@ import java.util.Enumeration;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.FontUIResource;
 
+//TFC mode font size R.Shute
+import java.awt.Font;
+import java.util.Enumeration;
+
+
 /**
  *
  * @author adrianromero
@@ -118,8 +123,9 @@ public class StartPOS {
                     logger.log(Level.WARNING, "Cannot set look and feel", e);
                 }
                 
-                StartPOS.setApplicationFont(16.0F);
-                
+                //TFC mode font size R.Shute
+                setApplicationFont(16); //font size override
+
                 String screenmode = config.getProperty("machine.screenmode");
                 if ("fullscreen".equals(screenmode)) {
                     JRootKiosk rootkiosk = new JRootKiosk();

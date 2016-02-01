@@ -65,6 +65,8 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
     
     private Icon menu_open;
     private Icon menu_close;
+    
+    private int actionCount = 0;
         
     /** Creates new form JPrincipalApp */
     public JPrincipalApp(JRootApp appview, AppUser appuser) {
@@ -211,6 +213,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
                 if (m_actionfirst == null) {
                     m_actionfirst = act;
                 }
+                ++ actionCount;
             }
         }
         
@@ -374,7 +377,10 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
                 // se tiene que mostrar el panel                
                 m_jLastView = m_jMyView;
 
-                setMenuVisible(getBounds().width > 800);
+                logger.log(Level.INFO, "MENU Actions:"+ actionCount);
+
+                // Make menu visible, if there are lots of options.
+                setMenuVisible(actionCount > 5);
 
                 showView(sTaskClass);   
                 // Y ahora que he cerrado la antigua me abro yo            

@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 import com.openbravo.pos.printer.*;
@@ -77,7 +79,10 @@ public class JRootApp extends JPanel implements AppView {
     private JPrincipalApp m_principalapp = null;
     
     private static HashMap<String, String> m_oldclasses; // This is for backwards compatibility purposes
-    
+
+    private javax.swing.Timer m_timer;
+    private static Logger logger = Logger.getLogger("com.openbravo.pos.forms.JRootApp");
+            
     static {        
         initOldClasses();
     }
@@ -226,7 +231,36 @@ public class JRootApp extends JPanel implements AppView {
         
         showLogin();
 
+        // initialise m_timer to go every so often
+        int initialDelay = 5000; // milliseconds
+        int delay = 5 * 60000; // milliseconds
+        m_timer = new javax.swing.Timer(
+            delay,
+            new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logger.log(Level.INFO, "Timer tick");
+                keepConnectionAlive();
+            }
+        });
+        m_timer.setInitialDelay(initialDelay);
+        m_timer.start();
+
         return true;
+    }
+    
+    private void keepConnectionAlive()
+    {
+        // Called on a timer, do some useless SQL to keep the DB
+        // connection open.
+        try
+        {
+            // This is a dummy SQL statement which does nothing,
+            // and returns no results, but still hits the DB.
+            m_dlSystem.execDummy();
+        } catch (BasicException e) {
+            // Ignore
+        }
+        
     }
     
     private String readDataBaseVersion() {

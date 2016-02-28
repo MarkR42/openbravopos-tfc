@@ -25,6 +25,7 @@ import com.openbravo.pos.util.ThumbNailBuilder;
 
 import java.util.*;
 import javax.swing.*;
+import javax.swing.JLabel;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -450,6 +451,9 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         jPanel4.setLayout(new java.awt.BorderLayout());
 
         m_lblIndicator.setText("jLabel1");
+        //Text below icon
+        m_lblIndicator.setVerticalTextPosition(JLabel.BOTTOM);
+        m_lblIndicator.setHorizontalTextPosition(JLabel.CENTER);
         jPanel4.add(m_lblIndicator, java.awt.BorderLayout.NORTH);
 
         m_jSubCategories.add(jPanel4, java.awt.BorderLayout.CENTER);

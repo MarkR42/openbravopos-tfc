@@ -67,7 +67,7 @@ public class StartPOS {
     /*
      * Set the font size for everything
      */
-    private static void setApplicationFont(float size)
+    private static void setApplicationFont(float size, boolean bold)
     {
         Enumeration enumer = UIManager.getDefaults().keys();
         while (enumer.hasMoreElements()) {
@@ -75,7 +75,13 @@ public class StartPOS {
             Object value = UIManager.get(key);
             if ((value instanceof Font))
             {
-                UIManager.put(key, new FontUIResource(((Font)value).deriveFont(size)));
+                Font oldFont = (Font)value;
+                Font derivedFont = oldFont.deriveFont(size);
+                if (bold) {
+                    derivedFont = derivedFont.deriveFont(Font.BOLD);
+                }
+                Font newFont = new FontUIResource(derivedFont);
+                UIManager.put(key, newFont);
             }
         }
     }
@@ -124,7 +130,12 @@ public class StartPOS {
                 }
                 
                 //TFC mode font size R.Shute
-                setApplicationFont(16); //font size override
+                String fontSizeStr = config.getProperty("fonts.size");
+                if (fontSizeStr != null) {
+                    String fontBoldStr = config.getProperty("fonts.bold");
+                    boolean bold = (fontBoldStr != null);
+                    setApplicationFont(Float.parseFloat(fontSizeStr), bold); //font size override
+                }
 
                 String screenmode = config.getProperty("machine.screenmode");
                 if ("fullscreen".equals(screenmode)) {

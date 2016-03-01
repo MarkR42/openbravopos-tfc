@@ -23,6 +23,7 @@ import java.awt.image.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class ThumbNailBuilder {
     
@@ -70,19 +71,33 @@ public class ThumbNailBuilder {
     }      
     
     public Image getThumbNailText(Image img, String text) {
+        /*
+         * Create an image containing a thumbnail of the product image,
+         * or default image.
+         * 
+         * Then apply the text of the product name. Use text wrapping.
+         * 
+         * If the product name is too big for the label, ensure that
+         * the first part is displayed.
+         */
                 
         img = getThumbNail(img);
         
         BufferedImage imgtext = new BufferedImage(img.getWidth(null), img.getHeight(null),  BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = imgtext.createGraphics();
                 
-        // The text        
-        JLabel label = new JLabel();
+        // The text
+        // <p style="width: 100px"> DOES NOT WORK PROPERLY.
+        // use width= instead.
+        String html = "<html><p style=\"text-align:center\" width=\"" + imgtext.getWidth() +"\">" + 
+            StringEscapeUtils.escapeHtml(text) + 
+            "</p>";
+
+        JLabel label = new JLabel(html);
         label.setOpaque(false);
-        label.setText(text);
         //label.setText("<html><center>Line1<br>Line2");
         label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        label.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);            
+        label.setVerticalAlignment(javax.swing.SwingConstants.TOP);            
         Dimension d = label.getPreferredSize();
         label.setBounds(0, 0, imgtext.getWidth(), d.height);  
         
@@ -98,7 +113,10 @@ public class ThumbNailBuilder {
         Paint gpaint = new GradientPaint(new Point(0,0), c1, new Point(label.getWidth() / 2, 0), c2, true);
         
         g2d.drawImage(img, 0, 0, null);
-        g2d.translate(0, imgtext.getHeight() - label.getHeight());
+        int ypos = imgtext.getHeight() - label.getHeight();
+        int ypos_min = -4; // todo: configurable
+        if (ypos < ypos_min) ypos = ypos_min; // Clamp label
+        g2d.translate(0, ypos);
         g2d.setPaint(gpaint);            
         g2d.fillRect(0 , 0, imgtext.getWidth(), label.getHeight());    
         label.paint(g2d);

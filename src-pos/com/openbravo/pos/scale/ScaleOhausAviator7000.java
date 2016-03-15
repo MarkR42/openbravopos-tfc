@@ -229,7 +229,8 @@ public class ScaleOhausAviator7000 implements Scale, SerialPortEventListener {
             case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
                 break;
             case SerialPortEvent.DATA_AVAILABLE:
-               JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "Data available interrupt received",null ));
+               // JMessageDialog.showMessage(this.parent, new MessageInf(MessageInf.SGN_WARNING, "Data available interrupt received",null ));
+               break;
 
         }
     }

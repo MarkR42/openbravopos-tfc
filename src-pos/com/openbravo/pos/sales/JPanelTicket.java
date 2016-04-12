@@ -1374,7 +1374,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanTotals.setLayout(new java.awt.GridBagLayout());
 
         m_jTotalEuros.setBackground(java.awt.Color.white);
-        m_jTotalEuros.setFont(new java.awt.Font("Dialog", 1, 14));
+        /*
+         * Ensure that the total's font is bigger than the usual.
+         */
+        
+        int previousSize = m_jTotalEuros.getFont().getSize();
+        int newSize = previousSize + 2;
+        if (newSize < 14) { newSize = 14; }
+        m_jTotalEuros.setFont(new java.awt.Font("Dialog", 1, newSize));
+        
         m_jTotalEuros.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         m_jTotalEuros.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jTotalEuros.setOpaque(true);

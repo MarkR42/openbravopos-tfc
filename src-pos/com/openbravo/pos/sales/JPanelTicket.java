@@ -255,7 +255,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         
         executeEvent(m_oTicket, m_oTicketExt, "ticket.show");
         
-        refreshTicket();               
+        refreshTicket();
+		// resetSouthComponent will return to the top level in 
+		// the catalogue.
+        resetSouthComponent();  
     }
     
     public TicketInfo getActiveTicket() {
@@ -306,7 +309,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             
             // Muestro el panel de tickets.
             cl.show(this, "ticket");
-            resetSouthComponent();
+            // resetSouthComponent will reset the catalogue category
+            // to the root, we may not want this.
+            // resetSouthComponent();
             
             // activo el tecleador...
             m_jKeyFactory.setText(null);       

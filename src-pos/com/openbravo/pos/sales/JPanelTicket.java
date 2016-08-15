@@ -520,6 +520,28 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             new MessageInf(eData).show(this);               
         }
     }
+
+    private void incProductByCodeWeight(String sCode, double weight) {
+    /*
+     * Find product with sCode in the database, add it, but set the weight
+     * to weight.
+     * 
+     * This is used for barcodes with the weight in the code.
+     */ 
+        try {
+            ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
+            if (oProduct == null) {                  
+                Toolkit.getDefaultToolkit().beep();                   
+                new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);           
+                stateToZero();
+            } else {
+                incProduct(weight, oProduct);
+            }
+        } catch (BasicException eData) {
+            stateToZero();
+            new MessageInf(eData).show(this);               
+        }
+    }
     
     private void incProduct(ProductInfoExt prod) {
         
@@ -590,8 +612,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     // Se anade directamente una unidad con el precio y todo
                     addTicketLine(oProduct, 1.0, includeTaxes(oProduct.getTaxCategoryID(), oProduct.getPriceSell()));
                 } else if (sCode.length() == 13 && sCode.startsWith("210")) {
-                    // barcode of a weigth product
+                    // barcode of a priced product
+                    // Characters 0-6 contain the product code (in db) 
+                    // Characters 7-12 contain price in pence / cents.
                     incProductByCodePrice(sCode.substring(0, 7), Double.parseDouble(sCode.substring(7, 12)) / 100);
+                } else if (sCode.length() == 13 && sCode.startsWith("230")) {
+                    // barcode of a weighed product.
+                    // Characters 0-6 contain the product code (in db) 
+                    // weight in characters 7-12, with 3 decimals,
+                    // e.g. 2304567001239 = 123 grams of product 2304567 
+                    incProductByCodeWeight(sCode.substring(0, 7), 
+                        Double.parseDouble(sCode.substring(7, 12)) / 1000);
                 } else {
                     incProductByCode(sCode);
                 }

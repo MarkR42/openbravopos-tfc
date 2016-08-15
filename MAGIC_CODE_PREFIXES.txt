@@ -1,0 +1,27 @@
+Magic Barcode prefixes:
+-----------------------
+
+These are defined in JPanelTicket.java.
+
+The barcode must be 13 digits long.
+
+PREFIX: 210: PRE-PRICED PRODUCTS
+// barcode of a priced product
+// Characters 0-6 contain the product code (in db) 
+// Characters 7-12 contain price in pence / cents.
+
+Example: 
+
+2104567012349
+
+Product code will be 2104567
+Price is £12.34
+(last digit is the check digit)
+
+PREFIX: 230 - PRE-WEIGHED PRODUCTS
+
+// barcode of a weighed product.
+// Characters 0-6 contain the product code (in db) 
+// weight in characters 7-12, with 3 decimals,
+// e.g. 2304567001239 = 123 grams of product 2304567 
+

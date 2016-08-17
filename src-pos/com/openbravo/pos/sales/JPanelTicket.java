@@ -310,8 +310,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             // Muestro el panel de tickets.
             cl.show(this, "ticket");
             // resetSouthComponent will reset the catalogue category
-            // to the root, we may not want this.
-            // resetSouthComponent();
+            // to the root, we may not want this. Make it configurable.
+            // If catalogue.reset is true, we reset the catalogue after
+            // an item is selected.
+            boolean enableReset = Boolean.valueOf(
+                m_App.getProperties().getProperty("catalogue.reset"));
+            if (enableReset) {
+                resetSouthComponent();
+            }
             
             // activo el tecleador...
             m_jKeyFactory.setText(null);       

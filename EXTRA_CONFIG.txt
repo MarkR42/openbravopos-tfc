@@ -1,0 +1,11 @@
+These are additional configuration parameters we have added.
+
+(Mark Robson, True Food Coop)
+
+Extra config parameters - put these in openbravopos.properties in user home dir
+
+fonts.size - the font size of the user interface, in points.
+
+catalogue.reset=false - does NOT reset the catalogue after each line added.
+catalogue.reset=true - DOES reset the catalogue after each line added.
+

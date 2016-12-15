@@ -486,8 +486,25 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void incProductByCode(String sCode) {
     // precondicion: sCode != null
         
+        /*
+         * Our barcode readers or barcodes, sometimes strip 
+         * leading zeros.
+         * 
+         * Try adding them if they are absent,
+         * only do this for ean13 codes.
+         */
+        String codeWithZeros = sCode;
+        while (codeWithZeros.length() < 13) {
+            codeWithZeros = "0" + codeWithZeros;
+        }
+        
         try {
-            ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
+            ProductInfoExt oProduct = null;
+            oProduct = dlSales.getProductInfoByCode(sCode);
+            // Try with leading zeros.
+            if (oProduct == null)
+                oProduct = dlSales.getProductInfoByCode(codeWithZeros);
+            
             if (oProduct == null) {                  
                 Toolkit.getDefaultToolkit().beep();                   
                 new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);           

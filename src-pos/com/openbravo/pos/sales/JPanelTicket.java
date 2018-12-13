@@ -591,12 +591,24 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
        
     protected void buttonTransition(ProductInfoExt prod) {
-    // precondicion: prod != null
+        /*
+         * The product might have changed price or details.
+         * Get a new product from the db.
+         */
+        ProductInfoExt prodNew = null;
+        try
+        {
+            prodNew = dlSales.getProductInfo(prod.getID());
+        } catch (BasicException eData) {
+            stateToZero();           
+            new MessageInf(eData).show(this);
+            return; // Do not add the product.
+        }
         
-         if (m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO) {
-            incProduct(prod);
+        if (m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO) {
+            incProduct(prodNew);
         } else if (m_iNumberStatusInput == NUMBERVALID && m_iNumberStatusPor == NUMBERZERO) {
-            incProduct(getInputValue(), prod);
+            incProduct(getInputValue(), prodNew);
         } else {
             Toolkit.getDefaultToolkit().beep();
         }       

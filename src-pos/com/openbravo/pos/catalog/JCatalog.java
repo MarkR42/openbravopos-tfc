@@ -89,13 +89,12 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
            
         if (id == null) {
             showRootCategoriesPanel();
-        } else {            
+        } else {
             showProductPanel(id);
         }
     }
     
     public void loadCatalog() throws BasicException {
-        
         // delete all categories panel
         m_jProducts.removeAll();
         
@@ -150,6 +149,11 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     }
     public void removeActionListener(ActionListener l) {
         listeners.remove(ActionListener.class, l);
+    }
+    
+    public void refresh() throws BasicException {
+        System.out.println("Refreshing catalogue");
+        loadCatalog();
     }
 
     public void valueChanged(ListSelectionEvent evt) {

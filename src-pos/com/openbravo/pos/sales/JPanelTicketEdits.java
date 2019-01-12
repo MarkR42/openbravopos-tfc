@@ -77,6 +77,8 @@ public class JPanelTicketEdits extends JPanelTicket {
 
     protected void resetSouthComponent() {
     }
+    protected void refreshSouthComponent() throws BasicException {
+    }
     
     private class CatalogListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {

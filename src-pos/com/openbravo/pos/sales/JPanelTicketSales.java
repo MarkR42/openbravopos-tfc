@@ -64,6 +64,10 @@ public class JPanelTicketSales extends JPanelTicket {
     protected void resetSouthComponent() {
         m_cat.showCatalogPanel(null);
     }
+
+    protected void refreshSouthComponent() throws BasicException {
+        m_cat.refresh();
+    }
     
     protected JTicketsBag getJTicketsBag() {
         return JTicketsBag.createTicketsBag(m_App.getProperties().getProperty("machine.ticketsbag"), m_App, this);

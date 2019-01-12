@@ -35,5 +35,6 @@ public interface CatalogSelector {
     public Component getComponent();
     
     public void addActionListener(ActionListener l);  
-    public void removeActionListener(ActionListener l);    
+    public void removeActionListener(ActionListener l);
+    public void refresh() throws BasicException; // Call to refresh the catalogue    
 }

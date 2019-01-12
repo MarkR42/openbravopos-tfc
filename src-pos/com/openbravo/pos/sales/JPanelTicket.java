@@ -240,6 +240,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     protected abstract JTicketsBag getJTicketsBag();
     protected abstract Component getSouthComponent();
     protected abstract void resetSouthComponent();
+    protected abstract void refreshSouthComponent() throws BasicException;
      
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt) {
        
@@ -990,6 +991,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             // reset the payment info
             m_oTicket.resetTaxes();
             m_oTicket.resetPayments();
+            /*
+             * Reload the catalogue in case the products have changed.
+             */
+            try {
+                refreshSouthComponent();
+            } catch (BasicException e) {
+                new MessageInf(e).show(this);
+            }
+
         }
         
         // cancelled the ticket.total script

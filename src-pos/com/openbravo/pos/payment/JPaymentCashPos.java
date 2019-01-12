@@ -100,9 +100,14 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
         if (value == null || value == 0.0) {
             m_dPaid = m_dTotal;
         } else {            
+            // If someone will accidentally enter a barcode into the payment
+            // cash field, don't accept it
+            Double tooMuch = new Double(100 * 1000);
+            if (value > tooMuch) {
+                value = 0.0; // Do not accept any money if too much
+            }
             m_dPaid = value;
-        }   
-
+        }
         int iCompare = RoundUtils.compare(m_dPaid, m_dTotal);
         
         m_jMoneyEuros.setText(Formats.CURRENCY.formatValue(new Double(m_dPaid)));

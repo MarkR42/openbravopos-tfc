@@ -266,7 +266,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         return m_oTicket;
     }
     
-    private void refreshTicket() {
+    public void refreshTicket() {
         
         CardLayout cl = (CardLayout)(getLayout());
         
@@ -484,6 +484,22 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_iNumberStatusPor = NUMBERZERO;
     }
     
+    private void showAlert(String localStr)
+    {
+        String message = AppLocal.getIntString(localStr);
+        // put message into alert
+        m_alertPanel.message = message;
+        // Show the alert panel
+        CardLayout cl = (CardLayout)(getLayout());
+        cl.show(this, "alert");  
+        m_alertPanel.requestFocus();
+    }
+    
+    public void injectKeyEvent(java.awt.event.KeyEvent evt)
+    {
+        m_jKeyFactoryKeyTyped(evt);
+    }
+    
     private void incProductByCode(String sCode) {
     // precondicion: sCode != null
         
@@ -507,8 +523,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 oProduct = dlSales.getProductInfoByCode(codeWithZeros);
             
             if (oProduct == null) {                  
-                Toolkit.getDefaultToolkit().beep();                   
-                new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);           
+                Toolkit.getDefaultToolkit().beep();
+                showAlert("message.noproduct");
                 stateToZero();
             } else {
                 // Se anade directamente una unidad con el precio y todo
@@ -527,7 +543,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
             if (oProduct == null) {                  
                 Toolkit.getDefaultToolkit().beep();                   
-                new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);           
+                showAlert("message.noproduct");
                 stateToZero();
             } else {
                 // Se anade directamente una unidad con el precio y todo
@@ -556,7 +572,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             ProductInfoExt oProduct = dlSales.getProductInfoByCode(sCode);
             if (oProduct == null) {                  
                 Toolkit.getDefaultToolkit().beep();                   
-                new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);           
+                showAlert("message.noproduct");
                 stateToZero();
             } else {
                 incProduct(weight, oProduct);
@@ -1655,6 +1671,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanContainer.add(catcontainer, java.awt.BorderLayout.SOUTH);
 
         add(m_jPanContainer, "ticket");
+        
+        m_alertPanel = new BigAlertPanel();
+        m_alertPanel.setVisible(true);
+        add(m_alertPanel, "alert");
+        
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jbtnScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtnScaleActionPerformed
@@ -1839,4 +1860,75 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JButton m_jbtnScale;
     // End of variables declaration//GEN-END:variables
 
+    private BigAlertPanel m_alertPanel;
+}
+
+class BigAlertPanel extends JPanel {
+    public String message = "";
+  public BigAlertPanel() {
+      addMouseListener(new java.awt.event.MouseListener() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {}
+            public void mouseReleased(java.awt.event.MouseEvent evt) {}
+            public void mouseEntered(java.awt.event.MouseEvent evt) {}
+            public void mouseExited(java.awt.event.MouseEvent evt) {}
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                // Click any mouse button anywhere to show the ticket.
+                showTicket(null);
+            }
+        });
+      addKeyListener(new java.awt.event.KeyListener() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {}
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                // Any key go back to the ticket.
+                showTicket(evt);                
+            }
+      });
+      setFocusable(true);
+  }
+        
+  public void paint(Graphics g) {
+    Rectangle bounds = getBounds();
+    g.setColor(Color.white);
+    g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    g.setColor(Color.red);
+    // Draw a fat diagnonal red line:
+    int dist = 50;
+    int x1 = dist;
+    int x2 = bounds.width - dist;
+    int x3 = bounds.width;
+    int y1 = dist;
+    int y2 = bounds.height - dist;
+    int y3 = bounds.height;
+    Polygon p = new Polygon();
+    p.addPoint(x1,0);
+    p.addPoint(x3,y2);
+    p.addPoint(x2,y3);
+    p.addPoint(0,y1);
+    g.fillPolygon(p);
+    p = new Polygon();
+    p.addPoint(x2,0);
+    p.addPoint(x3,y1);
+    p.addPoint(x1,y3);
+    p.addPoint(0,y2);
+    g.fillPolygon(p);
+    // Write the message.
+    g.setFont(g.getFont().deriveFont(20.0f)  );
+    g.setColor(Color.black);
+    g.drawString(message, 250,100);
+    
+  }
+  
+  private void showTicket(java.awt.event.KeyEvent evt) {
+      // Close the alert and show the ticket.
+      Container parent = getParent();
+      // CardLayout cl = (CardLayout)(parent.getLayout());
+      // cl.show(parent, "ticket");
+      JPanelTicket ticket = (JPanelTicket) parent;
+      ticket.refreshTicket(); // Moves the key focus etc.
+      if (evt != null) {
+          ticket.injectKeyEvent(evt);
+      }
+  }
 }

@@ -71,6 +71,13 @@ import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.DataLine;
+import java.net.URL;
+
 /**
  *
  * @author adrianromero
@@ -126,6 +133,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
+    
+    private Clip m_clip = null; // Alert sound clip
 
     /** Creates new form JTicketView */
     public JPanelTicket() {
@@ -493,6 +502,33 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         CardLayout cl = (CardLayout)(getLayout());
         cl.show(this, "alert");  
         m_alertPanel.requestFocus();
+        soundAlert();
+    }
+    
+    private void soundAlert()
+    {
+        // Swallow all exceptions
+        // For info, see
+        // https://stackoverflow.com/questions/21128797/audioinputstream-is-not-working
+        try {
+            // Make a loud and obnoxious sound
+            if (m_clip == null) {
+                URL url = this.getClass().getClassLoader().getResource("badcode.au");
+                AudioInputStream inputStream = AudioSystem.getAudioInputStream(url);
+                AudioFormat format = inputStream.getFormat();
+                DataLine.Info info = new DataLine.Info(Clip.class, format);
+                Clip clip = (Clip)AudioSystem.getLine(info);             // Get a sound clip resource.
+                clip.open(inputStream);
+                m_clip = clip;
+            }
+            m_clip.stop(); // stop if already playing.
+            m_clip.setFramePosition(0); // Reset to beginning
+            m_clip.start(); // play sample
+        }
+        catch (Exception e) {
+            System.out.println("FAIL PLAYING SOUND... details follow");
+            e.printStackTrace();
+        }
     }
     
     public void injectKeyEvent(java.awt.event.KeyEvent evt)
@@ -1892,7 +1928,8 @@ class BigAlertPanel extends JPanel {
     Rectangle bounds = getBounds();
     g.setColor(Color.white);
     g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-    g.setColor(Color.red);
+    Color green = new Color(0,120,0); // Darkish green
+    g.setColor(green);
     // Draw a fat diagnonal red line:
     int dist = 50;
     int x1 = dist;

@@ -495,15 +495,39 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     
     private void showAlert(String localStr)
     {
+        // Localised message:
         String message = AppLocal.getIntString(localStr);
-        // put message into alert
-        m_alertPanel.message = message;
-        // Show the alert panel
-        CardLayout cl = (CardLayout)(getLayout());
-        cl.show(this, "alert");  
-        m_alertPanel.requestFocus();
-        boolean enableSound = Boolean.valueOf(
-            m_App.getProperties().getProperty("sound.enable"));
+        
+        // Get configured alert type
+        // "quiet" = show alert without sound
+        // "loud" = alert + sound
+        // "default" (or anyting else) - default.
+        String alertType = String.valueOf(
+            m_App.getProperties().getProperty("alert.type"));
+        boolean enableSound = false;
+        boolean enablePanel = false;
+        if (alertType.equals("quiet")) {
+            enableSound = false;
+            enablePanel = true;
+        }
+        if (alertType.equals("loud")) {
+            enableSound = true;
+            enablePanel = true;
+        }
+        
+
+        if (enablePanel) {
+            // put message into alert
+            m_alertPanel.message = message;
+            // Show the alert panel
+            CardLayout cl = (CardLayout)(getLayout());
+            cl.show(this, "alert");  
+            m_alertPanel.requestFocus();            
+        } else {
+            // Default
+            Toolkit.getDefaultToolkit().beep();                
+            new MessageInf(MessageInf.SGN_WARNING, message).show(this);           
+        }
         if (enableSound) soundAlert();
     }
     

@@ -502,7 +502,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         CardLayout cl = (CardLayout)(getLayout());
         cl.show(this, "alert");  
         m_alertPanel.requestFocus();
-        soundAlert();
+        boolean enableSound = Boolean.valueOf(
+            m_App.getProperties().getProperty("sound.enable"));
+        if (enableSound) soundAlert();
     }
     
     private void soundAlert()

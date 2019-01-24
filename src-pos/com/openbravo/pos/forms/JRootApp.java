@@ -651,7 +651,7 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setText("<html><center>Openbravo POS is a point of sale application designed for touch screens.<br>" +
             "Copyright \u00A9 2007-2009 Openbravo, S.L.<br>" +
             "http://www.openbravo.com/product/pos<br>" +
-            "True Food Coop mod 2019.01, http://www.truefood.coop/<br>" +
+            "True Food Coop mod 2019.02, http://www.truefood.coop/<br>" +
             "<br>" +
             "Openbravo POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +
             "<br>" +

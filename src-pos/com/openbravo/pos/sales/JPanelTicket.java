@@ -1896,7 +1896,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JButton m_jDown;
     private javax.swing.JButton m_jEditLine;
     private javax.swing.JButton m_jEnter;
-    private javax.swing.JTextField m_jKeyFactory;
+    javax.swing.JTextField m_jKeyFactory;
     private javax.swing.JLabel m_jLblTotalEuros1;
     private javax.swing.JLabel m_jLblTotalEuros2;
     private javax.swing.JLabel m_jLblTotalEuros3;
@@ -1927,10 +1927,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
 class BigAlertPanel extends JPanel {
     public String message = "";
-  public BigAlertPanel() {
+    public BigAlertPanel() {
       addMouseListener(new java.awt.event.MouseListener() {
             public void mousePressed(java.awt.event.MouseEvent evt) {}
-            public void mouseReleased(java.awt.event.MouseEvent evt) {}
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                // or drag the mouse, that's ok too.
+                showTicket(null);
+                }
             public void mouseEntered(java.awt.event.MouseEvent evt) {}
             public void mouseExited(java.awt.event.MouseEvent evt) {}
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1948,7 +1951,7 @@ class BigAlertPanel extends JPanel {
             }
       });
       setFocusable(true);
-  }
+    }
         
   public void paint(Graphics g) {
     Rectangle bounds = getBounds();
@@ -1984,14 +1987,19 @@ class BigAlertPanel extends JPanel {
   }
   
   private void showTicket(java.awt.event.KeyEvent evt) {
-      // Close the alert and show the ticket.
-      Container parent = getParent();
-      // CardLayout cl = (CardLayout)(parent.getLayout());
-      // cl.show(parent, "ticket");
-      JPanelTicket ticket = (JPanelTicket) parent;
-      ticket.refreshTicket(); // Moves the key focus etc.
-      if (evt != null) {
+        // Close the alert and show the ticket.
+        Container parent = getParent();
+        JPanelTicket ticket = (JPanelTicket) parent;
+        // Do not call refreshTicket() because that does lots of unnececessary
+        // work, and also calls invokeLater to set the focus.
+        // Do it immediately instead.
+        CardLayout cl = (CardLayout)(parent.getLayout());
+        cl.show(parent, "ticket");   
+        // Make sure focus is in the right place
+        ticket.m_jKeyFactory.requestFocus();
+        // Inject the key already pressed.
+        if (evt != null) {
           ticket.injectKeyEvent(evt);
-      }
+        }
   }
 }

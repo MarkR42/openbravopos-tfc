@@ -9,3 +9,8 @@ fonts.size - the font size of the user interface, in points.
 catalogue.reset=false - does NOT reset the catalogue after each line added.
 catalogue.reset=true - DOES reset the catalogue after each line added.
 
+alert.type=loud - make a big loud alert on bad barcode.
+alert.type=quiet - make a big quiet alert
+
+
+

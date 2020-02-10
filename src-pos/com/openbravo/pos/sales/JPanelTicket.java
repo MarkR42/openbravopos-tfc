@@ -704,15 +704,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     try {
                         CustomerInfoExt newcustomer = dlSales.findCustomerExt(sCode);
                         if (newcustomer == null) {
-                            Toolkit.getDefaultToolkit().beep();                   
-                            new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.nocustomer")).show(this);           
+                            showAlert("message.nocustomer");           
                         } else {
                             m_oTicket.setCustomer(newcustomer);
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
+                            executeEventAndRefresh("ticket.change");
                         }
                     } catch (BasicException e) {
-                        Toolkit.getDefaultToolkit().beep();                   
-                        new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.nocustomer"), e).show(this);           
+                        new MessageInf(e).show(this);               
+                        // showAlert("message.nocustomer");           
                     }
                     stateToZero();
                 } else if (sCode.length() == 13 && sCode.startsWith("250")) {
@@ -1378,7 +1378,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jTicketId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         m_jTicketId.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jTicketId.setOpaque(true);
-        m_jTicketId.setPreferredSize(new java.awt.Dimension(160, 25));
+        m_jTicketId.setPreferredSize(new java.awt.Dimension(320, 25));
         m_jTicketId.setRequestFocusEnabled(false);
         m_jButtons.add(m_jTicketId);
 
@@ -1831,7 +1831,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             msg.show(this);            
         }
 
-        refreshTicket();
+        executeEventAndRefresh("ticket.change");
         
 }//GEN-LAST:event_btnCustomerActionPerformed
 
